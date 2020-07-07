@@ -57,14 +57,12 @@ quantum gravity.
 %-------------------------------------------------------------------------------
 \section*{DESCRIZIONE DEL CODICE}
 La parte iniziale del codice denominata “GUI” contiene tutti i gruppi grafici dentro i quali abbiamo inserito i vari elementi –grafici appunto- del nostro strumento di sintesi quali knob, fader, pulsanti e meter.
-Il modulo di sintesi sottrattiva chiamato “SUBTRACTIVE” contiene al suo interno un generatore di rumore bianco e uno di dente di sega con frequenza fissa, swichabili tramite un apposito pulsante. Il tutto va dentro un filtro risonante “Ladder” basato sul modello di Robert Moog con relativi controlli di f cut e Q factor, ed in seguito ad un cotrollo di ampiezza.
-Il modulo di sottrattiva è posto nella parte destra del synth.
 
-%--------------------------------------------
-%----------------larghezza massima del codice
+%-----------------------------------------------------
+%-------------------------larghezza massima del codice
 \begin{lstlisting}
 // GUI
-main(x) = hgroup("[01] Superstereo Synth",x);----------
+main(x) = hgroup("[01] Superstereo Synth",x);
 s_g(x) = main(vgroup("[01] SUBTRACTIVE",x));
 m_g(x) = main(vgroup("[03] MASTER",x));
 p_g(x) = main(vgroup("[05] PHASER",x));
@@ -77,10 +75,36 @@ rmeter(x) = main(attach(
 meters = lmeter, rmeter;
 \end{lstlisting}
 
+Il modulo di sintesi sottrattiva chiamato “SUBTRACTIVE” contiene al suo interno un generatore di rumore bianco e uno di dente di sega con frequenza fissa, swichabili tramite un apposito pulsante. Il tutto va dentro un filtro risonante “Ladder” basato sul modello di Robert Moog con relativi controlli di f cut e Q factor, ed in seguito ad un cotrollo di ampiezza.
+Il modulo di sottrattiva è posto nella parte destra del synth.
+
+
+%-----------------------------------------------------
+%-------------------------larghezza massima del codice
+\begin{lstlisting}
+// SUBTRACTIVE
+// Sawfreq Custom
+sawfreq = 123;
+generator = (no.noise *switch),
+ (os.sawtooth(sawfreq)*(1-switch)) :> _;
+switch = s_g(checkbox("[01] Saw/Noise")) : si.smoo;
+gain = s_g(vslider("[04] Gain [style:knob]",
+ -12,-96,+12,0.01)) : ba.db2linear : si.smoo;
+Q = s_g(vslider("[03] Q [style:knob]",
+ 5,0.7072,25,0.01));
+fcut = s_g( vslider("[02] Cut [style:knob]",
+ 0.65,0,1,0.001)) : si.smoo;
+subtractive = generator : ve.moogLadder(fcut,Q) :
+ *(gain);
+\end{lstlisting}
+
+
 Di seguito troviamo un Phaser Stereo chiamato “PHASERSYNTH”, costruito tramite una sequenza di N allpass, come dal modello di Curtis Roads su “The Computer Music Tutorial”, di cui il canale R agisce di fase opposta al canale L. Il segnale verrà reso stereofonico tramite la tecnica dello “Stereo Shuffling”. Il “Superstereophaser” (così chiamato citando il film “Ritorno al futuro”), avrà 3 tipi di controlli tramite dei knob:
-- LFO frequency
-- Feedback
-- Delay
+\begin{compactitem}
+\item LFO frequency
+\item Feedback
+\item Delay
+\end{compactitem}
 Lo “Supersterieophaser” è posto sulla parte destra del synth e potrà essere bypassato tramite un apposito pulsante posto in cima alla sezione stessa.
 Successivamente, il nostro segnale entrerà all’interno di un numero N di chopper (Hard Limiter) che limiteranno il segnale in modo netto secondo una soglia prestabilita, seguiti da N filtri passa basso di diverso ordine, in modo da rendere più “smooth” il segnale generato, attenuando le armoniche superiori generate dai chopper e mantenere quelle inferiori.
 

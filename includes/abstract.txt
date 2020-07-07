@@ -1,9 +1,3 @@
-General relativity (GR), also known as the general theory of relativity (GTR),
-is the geometric theory of gravitation published by Albert Einstein in 1915 and
-the current description of gravitation in modern physics. General relativity
-generalizes special relativity and refines Newton's law of universal gravitation,
-providing a unified description of gravity as a geometric property of space and
-time, or spacetime. In particular, the curvature of spacetime is directly related
-to the energy and momentum of whatever matter and radiation are present. The
-relation is specified by the Einstein field equations, a system of partial
-differential equations. %\cite{smalley_1997}
+Durante la prima parte del corso di Sistemi, tecnologie, applicazioni e linguaggi di programmazione per la multimedialità si è deciso di intraprendere la costruzione di uno strumento di sintesi per affrontare sia l’aspetto audio/musicale che di programmazione.
+Come linguaggio di programmazione per la scrittura del nostro Synth è stato scelto Faust (Functional Audio Stream). Il linguaggio di Faust è di tipo algebrico ma genera un codice c++, in modo che possa essere “universale” per tutte le piattaforme, come ad esempio il Web.
+Abbiamo cercato di rendere lo strumento il più possibile simile ad uno modello fisico, sia per quanto riguarda la parte grafica che quella di controllo.

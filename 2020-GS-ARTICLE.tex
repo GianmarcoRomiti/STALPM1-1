@@ -41,7 +41,7 @@
 \thispagestyle{empty}
 %-------------------------------------------------------------------------------
 %-------------------------------------------------------------------------------
-\section*{UNNUMBERED SECTION}
+\section*{INTRODUZIONE}
 Some predictions of general relativity differ significantly from those of
 classical physics, especially concerning the passage of time, the geometry of
 space, the motion of bodies in free fall, and the propagation of light. Examples
@@ -55,20 +55,23 @@ remain, the most fundamental being how general relativity can be reconciled with
 the laws of quantum physics to produce a complete and self-consistent theory of
 quantum gravity.
 %-------------------------------------------------------------------------------
-\subsection*{UNNUMBERED SUB-SECTION}
-Einstein's theory has important astrophysical implications. For example, it
-implies the existence of black holes regions of space in which space and time
-are distorted in such a way that nothing, not even light, can escape as an
-end state for massive stars. There is ample evidence that the intense radiation
-emitted by certain kinds of astronomical objects is due to black holes. For
-example, microquasars and active galactic nuclei result from the presence of
-stellar black holes and supermassive black holes, respectively. The bending of
-light by gravity can lead to the phenomenon of gravitational lensing, in which
-multiple images of the same distant astronomical object are visible in the sky.
-General relativity also predicts the existence of gravitational waves, which
-have since been observed directly by the physics collaboration LIGO. In addition,
-general relativity is the basis of current cosmological models of a consistently
-expanding universe.
+\section*{DESCRIZIONE DEL CODICE}
+La parte iniziale del codice denominata “GUI” contiene tutti i gruppi grafici dentro i quali abbiamo inserito i vari elementi –grafici appunto- del nostro strumento di sintesi quali knob, fader, pulsanti e meter.
+Il modulo di sintesi sottrattiva chiamato “SUBTRACTIVE” contiene al suo interno un generatore di rumore bianco e uno di dente di sega con frequenza fissa, swichabili tramite un apposito pulsante. Il tutto va dentro un filtro risonante “Ladder” basato sul modello di Robert Moog con relativi controlli di f cut e Q factor, ed in seguito ad un cotrollo di ampiezza.
+Il modulo di sottrattiva è posto nella parte destra del synth.
+
+Di seguito troviamo un Phaser Stereo chiamato “PHASERSYNTH”, costruito tramite una sequenza di N allpass, come dal modello di Curtis Roads su “The Computer Music Tutorial”, di cui il canale R agisce di fase opposta al canale L. Il segnale verrà reso stereofonico tramite la tecnica dello “Stereo Shuffling”. Il “Superstereophaser” (così chiamato citando il film “Ritorno al futuro”), avrà 3 tipi di controlli tramite dei knob:
+- LFO frequency
+- Feedback
+- Delay
+Lo “Supersterieophaser” è posto sulla parte destra del synth e potrà essere bypassato tramite un apposito pulsante posto in cima alla sezione stessa.
+Successivamente, il nostro segnale entrerà all’interno di un numero N di chopper (Hard Limiter) che limiteranno il segnale in modo netto secondo una soglia prestabilita, seguiti da N filtri passa basso di diverso ordine, in modo da rendere più “smooth” il segnale generato, attenuando le armoniche superiori generate dai chopper e mantenere quelle inferiori.
+
+Il tutto entrerà nella sezione chiamata “MASTER CONTROLS” nella quale avremo in ordine:
+- Pulsante “MUTE”, che chiude il segnale alla fine della catena (pre-fader)
+- Controllo del volume Master tramite un fader verticale con valori in scala logaritmica posto al centro del synth.
+-Due Meters, sempre su scala logaritmica, posti al due lati della sezione Master.
+La sezione Master si trova nella parte centrale del nostro Synth.
 %-------------------------------------------------------------------------------
 \subsubsection*{UNNUMBERED SUB-SUB-SECTION}
 Some predictions of general relativity differ significantly from those of

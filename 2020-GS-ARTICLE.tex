@@ -60,6 +60,23 @@ La parte iniziale del codice denominata “GUI” contiene tutti i gruppi grafic
 Il modulo di sintesi sottrattiva chiamato “SUBTRACTIVE” contiene al suo interno un generatore di rumore bianco e uno di dente di sega con frequenza fissa, swichabili tramite un apposito pulsante. Il tutto va dentro un filtro risonante “Ladder” basato sul modello di Robert Moog con relativi controlli di f cut e Q factor, ed in seguito ad un cotrollo di ampiezza.
 Il modulo di sottrattiva è posto nella parte destra del synth.
 
+%--------------------------------------------
+%----------------larghezza massima del codice
+\begin{lstlisting}
+// GUI
+main(x) = hgroup("[01] Superstereo Synth",x);----------
+s_g(x) = main(vgroup("[01] SUBTRACTIVE",x));
+m_g(x) = main(vgroup("[03] MASTER",x));
+p_g(x) = main(vgroup("[05] PHASER",x));
+lmeter(x) = main(attach(
+	x,an.amp_follower(0.150,x) : ba.linear2db :
+	vbargraph("[02] L [unit:dB]", -70,0)));
+rmeter(x) = main(attach(
+	x,an.amp_follower(0.150,x) : ba.linear2db :
+	vbargraph("[04] R [unit:dB]", -70,0)));
+meters = lmeter, rmeter;
+\end{lstlisting}
+
 Di seguito troviamo un Phaser Stereo chiamato “PHASERSYNTH”, costruito tramite una sequenza di N allpass, come dal modello di Curtis Roads su “The Computer Music Tutorial”, di cui il canale R agisce di fase opposta al canale L. Il segnale verrà reso stereofonico tramite la tecnica dello “Stereo Shuffling”. Il “Superstereophaser” (così chiamato citando il film “Ritorno al futuro”), avrà 3 tipi di controlli tramite dei knob:
 - LFO frequency
 - Feedback

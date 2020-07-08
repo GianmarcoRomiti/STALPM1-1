@@ -181,6 +181,22 @@ mutes = mute,mute;
 master = (*(volume), *(volume));
 \end{lstlisting}
 
+Di seguito la struttura generale del programma, sia in forma di codice che
+rappresentata attraverso un diagramma a blocchi (fig.1):
+
+\begin{lstlisting}
+process= subtractive : phaser : master : mutes : meters;
+\end{lstlisting}
+
+\begin{figure}[b]
+\begin{center}
+\includegraphics[width=.47\textwidth]{img/process}
+\caption{\textbf{Process}. Diagramma a blocchi della struttura del synth.}
+\label{gr01}
+\end{center}
+\end{figure}
+
+
 %-------------------------------------------------------------------------------
 \subsubsection*{UNNUMBERED SUB-SUB-SECTION}
 Some predictions of general relativity differ significantly from those of

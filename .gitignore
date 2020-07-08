@@ -5,7 +5,8 @@
 *.cls
 *.bcf
 
-*.pdf
+#*.pdf
+2020-GS-ARTICLE.pdf
 
 *.synctex.gz
 .project

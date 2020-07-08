@@ -1,3 +1,7 @@
-Durante la prima parte del corso di Sistemi, tecnologie, applicazioni e linguaggi di programmazione per la multimedialità si è deciso di intraprendere la costruzione di uno strumento di sintesi per affrontare sia l’aspetto audio/musicale che di programmazione.
-Come linguaggio di programmazione per la scrittura del nostro Synth è stato scelto Faust (Functional Audio Stream). Il linguaggio di Faust è di tipo algebrico ma genera un codice c++, in modo che possa essere “universale” per tutte le piattaforme, come ad esempio il Web.
-Abbiamo cercato di rendere lo strumento il più possibile simile ad uno modello fisico, sia per quanto riguarda la parte grafica che quella di controllo.
+%[Durante la prima parte del]
+Il corso di “Sistemi, tecnologie, applicazioni e linguaggi di programmazione per la multimedialità” si è %[deciso di intraprendere la]
+sviluppato attorno alla progettazione e realizzazione %[costruzione]
+di uno strumento di sintesi digitale attraverso cui affrontare sia aspetti musicali che di programmazione.
+Come linguaggio di programmazione per la scrittura del Synth è stato scelto Faust (Functional Audio Stream). Il linguaggio di Faust è di tipo algebrico e genera un codice c++ %[, in modo che possa essere “universale” per tutte le piattaforme,]
+multi-piattaforma, tra cui applicazioni per il Web.
+Si è cercato di rendere lo strumento il più possibile simile ad un modello analogico, sia per quanto riguarda la parte grafica che quella di controllo.

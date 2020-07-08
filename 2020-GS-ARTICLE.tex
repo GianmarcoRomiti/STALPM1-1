@@ -42,20 +42,25 @@
 %-------------------------------------------------------------------------------
 %-------------------------------------------------------------------------------
 \section*{INTRODUZIONE}
-Some predictions of general relativity differ significantly from those of
-classical physics, especially concerning the passage of time, the geometry of
-space, the motion of bodies in free fall, and the propagation of light. Examples
-of such differences include gravitational time dilation, gravitational lensing,
-the gravitational redshift of light, and the gravitational time delay. The
-predictions of general relativity in relation to classical physics have been
-confirmed in all observations and experiments to date. Although general
-relativity is not the only relativistic theory of gravity, it is the simplest
-theory that is consistent with experimental data. However, unanswered questions
-remain, the most fundamental being how general relativity can be reconciled with
-the laws of quantum physics to produce a complete and self-consistent theory of
-quantum gravity.
+Partendo dal presupposto che la finalità del corso di STALPM 1 fosse quella
+di costruire un oggetto multimimediale indirizzato al web e che quindi se ne
+potesse usufruire anche in modo "non-locale", si è ragionato fin dalle prime
+lezioni sulla tipologia dell'oggetto in questione. Abbiamo quindi effettuato
+un veloce brainstorming sicchè la realizzazione dell'oggetto multimediale
+potesse sia portarci ad una finalità pratica, cioè quella di potere utilizzare
+esso come un nostro strumento di composizione, sia di apprendimento dei concetti
+basilari del mondo della programmazione, a noi sconosciuto o quasi fino a quel
+momento. Il frutto dei nostri ragionamenti è stato quello di realizzare un synth,
+inizialmente con l'idea di basarci su di un modello presistente, poi quella di
+realizzarne un modello con una struttura dei vari moduli e percorso del segnale
+nuova, rispetto a quelle che erano i nostri pensieri al momento della decisione.
+Per la realizzazione dello "Superstereo Synth" si è subito pensato a quale fosse
+la strada più efficace da intraprendere per la realizzazione del nostro
+sintetizzatore, partendo come detto da una conoscenza quasi nulla rispetto al
+mondo della programmazione.  a che tipo di
+sintetizzatore realizzare, ponendoci fin da subito la questione
 %-------------------------------------------------------------------------------
-\section*{DESCRIZIONE DEL CODICE}
+\subsubsection*{DESCRIZIONE DEL CODICE}
 La parte iniziale del codice denominata “GUI” contiene tutti i gruppi grafici dentro i quali abbiamo inserito i vari elementi –grafici appunto- del nostro strumento di sintesi quali knob, fader, pulsanti e meter.
 
 %-----------------------------------------------------
@@ -99,20 +104,83 @@ subtractive = generator : ve.moogLadder(fcut,Q) :
 \end{lstlisting}
 
 
-Di seguito troviamo un Phaser Stereo chiamato “PHASERSYNTH”, costruito tramite una sequenza di N allpass, come dal modello di Curtis Roads su “The Computer Music Tutorial”, di cui il canale R agisce di fase opposta al canale L. Il segnale verrà reso stereofonico tramite la tecnica dello “Stereo Shuffling”. Il “Superstereophaser” (così chiamato citando il film “Ritorno al futuro”), avrà 3 tipi di controlli tramite dei knob:
+Di seguito troviamo un Phaser Stereo chiamato “PHASERSYNTH”, costruito tramite una sequenza di N allpass, come dal modello di Curtis Roads su “The Computer Music Tutorial”, di cui il canale R agisce di fase opposta al canale L. Il segnale verrà reso stereofonico tramite la tecnica dello “Stereo Shuffling”. Lo “Superstereophaser” (così chiamato citando il film “Ritorno al futuro”), avrà 3 tipi di controlli tramite dei knob:
 \begin{compactitem}
 \item LFO frequency
 \item Feedback
 \item Delay
 \end{compactitem}
-Lo “Supersterieophaser” è posto sulla parte destra del synth e potrà essere bypassato tramite un apposito pulsante posto in cima alla sezione stessa.
+
+\begin{lstlisting}
+// PHASER
+lff = p_g(vslider("[02] Lfo [style:knob]",
+  0.358, 0, 16, 0.001)) : si.smoo;
+fbk = p_g(vslider("[03] Feedback [style:knob]",
+  -0.689, -0.999, 0.999, 0.001) : si.smoo);
+del = p_g(nentry("[04] Delay [style:knob]",
+  1, 1, 100, 1));
+
+lfo = os.osc(lff);
+
+phaserLR(N,x,d,g,fb) = x <: l,r
+with{
+  allpassL(d,g) = (+ <: de.fdelay(
+		(ma.SR/2),d),*(-g)) ~ *(g) : mem,_ : +;
+  allpassR(d,g) = (+ <: de.fdelay(
+		(ma.SR/2),d),*(g)) ~ *(-g) : mem,_ : +;
+  apseqL(N,d,g) = seq(i,N,allpassL(d,g));
+  apseqR(N,d,g) = seq(i,N,allpassR(d,g));
+
+  l= _, (+:apseqL(N,d,g))~*(fb):> _;
+  r=  _, (+:apseqR(N,d,g))~*(-fb):> _;
+};
+
+// STEREO SHUFFLER
+pot = m_g(vslider(
+	"[02] WIDE [style:knob]",100,0,200,0.1)) :
+	 /(100) : si.smoo;
+somma = + : /(2);
+diff = - : /(2);
+sdm = somma,diff;
+wide = _, * (sqrt(pot));
+stereoshuffle= _,_ <: sdm : wide <: sdm;
+
+// N all-pass custom (min = sharp | max = smooth)
+superstereophaser = phaserLR(4,_,del,lfo,fbk) :
+ stereoshuffle;
+\end{lstlisting}
+
+Lo “Superstereophaser” è posto sulla parte destra del synth e potrà essere bypassato tramite un apposito pulsante posto in cima alla sezione stessa.
 Successivamente, il nostro segnale entrerà all’interno di un numero N di chopper (Hard Limiter) che limiteranno il segnale in modo netto secondo una soglia prestabilita, seguiti da N filtri passa basso di diverso ordine, in modo da rendere più “smooth” il segnale generato, attenuando le armoniche superiori generate dai chopper e mantenere quelle inferiori.
+
+\begin{lstlisting}
+// HARD LIMITER
+chopper(a) = min(a) : max(-a);
+
+hardlimiter = chopper(0.7) :
+ fi.lowpass(12,15000): chopper(0.9) :
+ fi.lowpass6e(20000);
+phchop = superstereophaser :
+ hardlimiter, hardlimiter;
+ \end{lstlisting}
 
 Il tutto entrerà nella sezione chiamata “MASTER CONTROLS” nella quale avremo in ordine:
 - Pulsante “MUTE”, che chiude il segnale alla fine della catena (pre-fader)
 - Controllo del volume Master tramite un fader verticale con valori in scala logaritmica posto al centro del synth.
 -Due Meters, sempre su scala logaritmica, posti al due lati della sezione Master.
 La sezione Master si trova nella parte centrale del nostro Synth.
+
+\begin{lstlisting}
+// MASTER CONTROLS
+mute=m_g(*(1-(checkbox("[04] Mute")))) : si.smoo;
+volume = m_g(vslider("[02] VOLUME ",-6,-70,12,0.1)) :
+ ba.db2linear : si.smoo;
+bpc = p_g(checkbox("[01] Bypass"));
+phaser = ba.bypass1to2(bpc,phchop);
+mutes = mute,mute;
+master = (*(volume), *(volume));
+\end{lstlisting}
+
 %-------------------------------------------------------------------------------
 \subsubsection*{UNNUMBERED SUB-SUB-SECTION}
 Some predictions of general relativity differ significantly from those of

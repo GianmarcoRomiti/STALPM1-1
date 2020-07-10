@@ -1,0 +1,8 @@
+L'obbiettivo del corso di “Sistemi, tecnologie, applicazioni e linguaggi di
+programmazione per la multimedialità”  è stata la realizzazione
+di un synthesizer digitale che permette attraverso la programmazione di creare
+uno strumento di applicazione musicale. La realizzazione tecnica e grafica è
+facilitata da un prodotto finito di semplice ed immediato utilizzo, grazie a
+Faust (Functional Audio Stream), linguaggio di programmazione appositamente
+progettato per descrivere processi di sintesi e di elaborazione del suono,
+fruibile direttamente tramite applicazione web sull'interfaccia WebAssembly.
